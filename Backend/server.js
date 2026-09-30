@@ -1,5 +1,6 @@
 const express = require('express');
 const { Pool } = require('pg');
+const cors = require('cors');
 const app = express();
 const port = 3000;
 const pool = new Pool({
@@ -11,6 +12,10 @@ const pool = new Pool({
 });
 
 app.use(express.json());
+
+app.use(cors({
+    origin: process.env.CORS_ORIGIN || 'http://localhost:5173'
+}));
 
 app.get('/', (req, res) => {
     res.send('Hello World!!');
