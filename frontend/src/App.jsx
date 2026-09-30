@@ -1,17 +1,21 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+const API_URL = import.meta.env.VITE_API_URL;
+import './App.scss'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-  <div>
-    <h1>Bonjour react</h1>
-  </div>
+      <header>
+        <div>
+          <h1>Vos taches :</h1>
+        </div>
+      </header>
+
+      <main>
+
+      </main>
     </>
   )
 }
