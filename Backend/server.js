@@ -22,7 +22,7 @@ app.listen(port, () => {
 
 // Routes API
 
-app.post('/api/tasks', async (req, res) => {
+app.post('/tasks', async (req, res) => {
     const newTask = req.body;
     await pool.query(
         'INSERT INTO tasks (id, titre, complete) VALUES ($1, $2, $3)',
@@ -36,7 +36,7 @@ app.post('/api/tasks', async (req, res) => {
     });
 });
 
-app.get('/api/tasks', async (req, res) => {
+app.get('/tasks', async (req, res) => {
     const result = await pool.query('SELECT * FROM tasks');
     console.log(result.rows);
 
@@ -46,7 +46,7 @@ app.get('/api/tasks', async (req, res) => {
     });
 });
 
-app.put('/api/tasks/:id', async (req, res) => {
+app.put('/tasks/:id', async (req, res) => {
     const taskID = req.params.id;
     const putTask = req.body;
 
@@ -61,7 +61,7 @@ app.put('/api/tasks/:id', async (req, res) => {
     });
 });
 
-app.delete('/api/tasks/:id', async (req, res) => {
+app.delete('/tasks/:id', async (req, res) => {
     const taskID = req.params.id;
 
     const result = await pool.query(
@@ -76,7 +76,7 @@ app.delete('/api/tasks/:id', async (req, res) => {
 });
 
 // Fonctionnalité A : marquer une tache complétée
-app.patch('/api/tasks/:id', async (req, res) => {
+app.patch('/tasks/:id/completed', async (req, res) => {
     const taskID = req.params.id;
 
     const result = await pool.query(
