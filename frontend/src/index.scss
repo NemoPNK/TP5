@@ -33,12 +33,9 @@ header {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin: 10px;
-  border: solid 5px #526CFF;
-  background-color: rgb(196, 235, 255);
-  border-radius: 10px;
+  background: linear-gradient(90deg, #556fff, #9a35ff);
   text-align: center;
-  padding: 20px 100px;
+  height: 70px;
 }
 
 .tasks-title {
@@ -131,4 +128,8 @@ header {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+#output {
+  margin: 5px 0px 10px 0px;
 }

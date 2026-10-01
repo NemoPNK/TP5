@@ -9,6 +9,8 @@ function App() {
   const [newTitle, setNewTitle] = useState('');
   const [deleteId, setDeleteId] = useState('');
   const [showDeleteForm, setShowDeleteForm] = useState(false);
+  const [message, setMessage] = useState('Je suis ben votre assitant personnel !');
+  const [messageColor, setMessageColor] = useState('black');
 
   const loadTasks = () => {
     fetch(`${API_URL}/tasks`)
@@ -39,6 +41,13 @@ function App() {
         }
 
         loadTasks()
+        setMessage("Ben : J'ai bien toogle votre tache ! 😁");
+        setMessageColor("#6ED500");
+
+        setTimeout(() => {
+          setMessage("Ben votre assistant personnel !");
+          setMessageColor("black");
+        }, 3000);
       })
   }
 
@@ -53,12 +62,26 @@ function App() {
       })
       .then(data => {
         setTasks(data.task)
+
+        setMessage("Ben : J'ai bien filtrer votre tache ! 😁");
+        setMessageColor("#6ED500");
+
+        setTimeout(() => {
+          setMessage("Ben votre assistant personnel !");
+          setMessageColor("black");
+        }, 3000);
       })
   }
 
   const addTask = () => {
     if (newTitle.trim() === '') {
-      alert("Le titre c'est obligatoire !!")
+      setMessage("Ben : Le titre est obligatoire !! 😡");
+      setMessageColor("#D50004");
+
+      setTimeout(() => {
+        setMessage("Ben votre assistant personnel !");
+        setMessageColor("black");
+      }, 3000);
       return
     }
 
@@ -75,12 +98,24 @@ function App() {
     })
       .then(response => {
         if (!response.ok) {
-          alert("Une tâche est déjà associée à cet ID, veuillez mettre un autre ID.")
+          setMessage("Ben : Une taches a deja cette ID choisis en une autre !! 😡");
+          setMessageColor("#D50004");
+
+          setTimeout(() => {
+            setMessage("Ben votre assistant personnel !");
+            setMessageColor("black");
+          }, 3000);
           return
         }
 
         loadTasks()
-        alert("C'est bon la tache est la")
+        setMessage("Ben : J'ai bien ajouter votre tache ! 😁");
+        setMessageColor("#6ED500");
+
+        setTimeout(() => {
+          setMessage("Ben votre assistant personnel !");
+          setMessageColor("black");
+        }, 3000);
       })
   }
 
@@ -90,12 +125,24 @@ function App() {
     })
       .then(response => {
         if (!response.ok) {
-          alert("Une erreur s'est produite")
+          setMessage("Ben : Une erreur c'est produite");
+          setMessageColor("#D50004");
+
+          setTimeout(() => {
+            setMessage("Ben votre assistant personnel !");
+            setMessageColor("black");
+          }, 3000);
           return
         }
 
         loadTasks()
-        alert("C'est bon la taches est plus la")
+        setMessage("Ben : J'ai bien supprimer votre tache ! 😁");
+        setMessageColor("#6ED500");
+
+        setTimeout(() => {
+          setMessage("Ben votre assistant personnel !");
+          setMessageColor("black");
+        }, 3000);
       })
   }
 
@@ -103,13 +150,14 @@ function App() {
     <>
       <header>
         <div>
-          <h1>Les taches cool qui se range et que vous pouvez ranger puis le rangement de ces tâches va devenir vraiment cool !</h1>
+          <h1>Range tes taches</h1>
         </div>
       </header>
       <main>
         <section>
           <div>
             <h2 className='tasks-title' >Vos taches :</h2>
+            <p id='output' style={{ color: messageColor }}>{message}</p>
             <div className='edit-container' >
               <div className='button-manager'>
                 <button id='green' onClick={() => filterTasks('all')}>Tous</button>
