@@ -1,7 +1,8 @@
 CREATE TABLE tasks (
     id INTEGER UNIQUE,
     titre VARCHAR(255),
-    complete BOOLEAN DEFAULT FALSE
+    complete BOOLEAN DEFAULT FALSE,
+    assignee VARCHAR(50)
 );
 
 INSERT INTO tasks (id, titre, complete)
