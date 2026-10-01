@@ -105,3 +105,17 @@ app.patch('/tasks/:id/completed', async (req, res) => {
         task: result.rows[0]
     });
 });
+
+app.patch('/tasks/:id/assignee', async (req, res) => {
+  const taskID = req.params.id;
+
+  const result = await pool.query(
+    'UPDATE tasks SET assignee = NULL WHERE id = $1 RETURNING *',
+    [taskID]
+  );
+
+  res.status(200).json({
+    message: 'Assignee removed',
+    task: result.rows[0]
+  });
+});

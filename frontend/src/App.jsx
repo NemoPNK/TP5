@@ -155,6 +155,26 @@ function App() {
       })
   }
 
+  const removeAssignee = (id) => {
+    fetch(`${API_URL}/tasks/${id}/assignee`, {
+      method: 'PATCH'
+    })
+      .then(response => {
+        if (!response.ok) {
+          return
+        }
+
+        loadTasks()
+        setMessage("Ben : J'ai bien supprimer vos données personnels ! 😁");
+        setMessageColor("#6ED500");
+
+        setTimeout(() => {
+          setMessage("Ben votre assistant personnel !");
+          setMessageColor("black");
+        }, 3000);
+      })
+  }
+
   return (
     <>
       <header>
@@ -211,26 +231,31 @@ function App() {
 
             {showAddForm && (
               <div className="form">
-                <div>
-                  <label htmlFor="task-id">ID</label>
-                  <input id="task-id" type="number" placeholder="Entrer un nombre" value={newId} onChange={(e) => setNewId(e.target.value)} />
+                <div className='input-manager'>
+                  <div className='input-form'>
+                    <label htmlFor="task-id">ID</label>
+                    <input id="task-id" type="number" placeholder="Entrer un nombre" value={newId} onChange={(e) => setNewId(e.target.value)} />
+                  </div>
+                  <div className='input-form'>
+                    <label htmlFor="task-title">Titre</label>
+                    <input id="task-title" type="text" placeholder="Entrer un titre" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
+                  </div>
+                  <div className='input-form'>
+                    <label htmlFor="task-assignee">Assignée la tache</label>
+                    <input id="task-assignee" type="text" maxLength="50" placeholder="Prénom" value={newAssignee} onChange={(e) => setNewAssignee(e.target.value)} />
+                  </div>
+                  <button onClick={() => { addTask(); setShowAddForm(false) }}>Appliquer</button>
                 </div>
-                <div>
-                  <label htmlFor="task-title">Titre</label>
-                  <input id="task-title" type="text" placeholder="Entrer un titre" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
-                </div>
-                <div>
-                  <label htmlFor="task-assignee">Assignée la tache</label>
-                  <input id="task-assignee" type="text" maxLength="50" placeholder="Prénom" value={newAssignee} onChange={(e) => setNewAssignee(e.target.value)} />
-                </div>
-                <button onClick={() => { addTask(); setShowAddForm(false) }}>Appliquer</button>
+                <p className="privacy-info">
+                  Le prénom sert uniquement à attribuer une tâche. Il est supprimé avec la tâche et peut être retiré à tout moment.
+                </p>
               </div>
             )}
 
             <ul className='tasks'>
               {tasks.map((task) => (
                 <li key={task.id}>
-                  {task.id} - {task.assignee} - {task.titre}
+                  {task.id} - {task.assignee || 'Personne'} - {task.titre}
 
                   <input
                     type="checkbox"
@@ -238,6 +263,12 @@ function App() {
                     checked={task.complete}
                     onChange={() => toogleTask(task.id)}
                   />
+
+                  {task.assignee && (
+                    <button className='button-benevole' onClick={() => removeAssignee(task.id)}>
+                      Retirer le bénévole
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>

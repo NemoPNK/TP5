@@ -75,14 +75,9 @@ header {
 
 .form {
   display: flex;
-  align-items: center;
   gap: 10px;
   margin: 0px 0px 15px 0px;
-
-  div {
-    display: flex;
-    flex-direction: column;
-  }
+  flex-direction: column;
 
   input {
     width: 80%;
@@ -95,9 +90,8 @@ header {
   button {
     width: 15%;
     border: solid 2px rgb(67, 68, 70);
-    border-radius: 10px;
+    border-radius: 30px;
     padding: 0px 0px 0px 10px;
-    height: 33px;
     padding: 0px;
     background-color: rgb(88, 88, 255);
     color: white;
@@ -111,6 +105,31 @@ header {
     height: 30px;
     font-size: 15px;
   }
+}
+
+.input-manager {
+  display: flex;
+  flex-direction: row;
+}
+
+.input-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.privacy-info {
+  font-size: 12px;
+}
+
+.button-benevole {
+  width: 20%;
+  border: solid 2px rgb(67, 68, 70);
+  border-radius: 30px;
+  padding: 0px 0px 0px 10px;
+  padding: 0px;
+  background-color: rgb(88, 88, 255);
+  color: white;
+  font-size: 13px;
 }
 
 #blue {
