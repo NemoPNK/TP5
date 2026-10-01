@@ -12,6 +12,7 @@ function App() {
   const [message, setMessage] = useState('Je suis ben votre assitant personnel !');
   const [messageColor, setMessageColor] = useState('black');
   const [isError, setIsError] = useState(false);
+  const [newAssignee, setNewAssignee] = useState('');
 
   const loadTasks = () => {
     fetch(`${API_URL}/tasks`)
@@ -96,7 +97,8 @@ function App() {
       body: JSON.stringify({
         id: Number(newId),
         titre: newTitle,
-        complete: false
+        complete: false,
+        assignee: newAssignee
       })
     })
       .then(response => {
@@ -209,10 +211,18 @@ function App() {
 
             {showAddForm && (
               <div className="form">
-                <label htmlFor="task-id">ID</label>
-                <input id="task-id" type="number" placeholder="Entrer un nombre" value={newId} onChange={(e) => setNewId(e.target.value)} />
-                <label htmlFor="task-title">Titre</label>
-                <input id="task-title" type="text" placeholder="Entrer un titre" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
+                <div>
+                  <label htmlFor="task-id">ID</label>
+                  <input id="task-id" type="number" placeholder="Entrer un nombre" value={newId} onChange={(e) => setNewId(e.target.value)} />
+                </div>
+                <div>
+                  <label htmlFor="task-title">Titre</label>
+                  <input id="task-title" type="text" placeholder="Entrer un titre" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
+                </div>
+                <div>
+                  <label htmlFor="task-assignee">Assignée la tache</label>
+                  <input id="task-assignee" type="text" maxLength="50" placeholder="Prénom" value={newAssignee} onChange={(e) => setNewAssignee(e.target.value)} />
+                </div>
                 <button onClick={() => { addTask(); setShowAddForm(false) }}>Appliquer</button>
               </div>
             )}
@@ -220,7 +230,7 @@ function App() {
             <ul className='tasks'>
               {tasks.map((task) => (
                 <li key={task.id}>
-                  {task.id} - {task.titre}
+                  {task.id} - {task.assignee} - {task.titre}
 
                   <input
                     type="checkbox"
