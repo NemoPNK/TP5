@@ -1,6 +1,6 @@
 CREATE TABLE tasks (
     id INTEGER UNIQUE,
-    titre TEXT,
+    titre VARCHAR(255),
     complete BOOLEAN DEFAULT FALSE
 );
 
