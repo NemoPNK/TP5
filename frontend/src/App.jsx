@@ -4,6 +4,10 @@ import './App.scss'
 
 function App() {
   const [tasks, setTasks] = useState([]);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newId, setNewId] = useState('');
+  const [newTitle, setNewTitle] = useState('');
+
 
   useEffect(() => {
     fetch(`${API_URL}/tasks`)
@@ -27,6 +31,20 @@ function App() {
       })
   }
 
+  const addTask = () => {
+    fetch(`${API_URL}/tasks`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: Number(newId),
+        titre: newTitle,
+        complete: false
+      })
+    })
+  }
+
 
   return (
     <>
@@ -46,11 +64,17 @@ function App() {
                 <button id='orange' onClick={() => filterTasks('pending')}>En attente</button>
               </div>
               <div className='button-manager'>
-                <button id='blue'>Ajouter</button>
+                <button id='blue' onClick={() => setShowAddForm(!showAddForm)}>Ajouter</button>
                 <button id='red'>Supprimer</button>
               </div>
             </div>
-            <div className='form'> <input type="text" /></div>
+            {showAddForm && (
+              <div className="add-form">
+                <input type="number" placeholder="ID" value={newId} onChange={(e) => setNewId(e.target.value)} />
+                <input type="text" placeholder="Titre" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
+                <button onClick={addTask}>Appliquer</button>
+              </div>
+            )}
             <div className='tasks'>
               {tasks.map((task) => (
                 <p key={task.id}>
