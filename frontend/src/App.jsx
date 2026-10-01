@@ -10,49 +10,87 @@ function App() {
   const [deleteId, setDeleteId] = useState('');
   const [showDeleteForm, setShowDeleteForm] = useState(false);
 
+const loadTasks = () => {
+  fetch(`${API_URL}/tasks`)
+    .then(response => {
+      if (!response.ok) {
+        alert("Une erreur s'est produite")
+      }
 
-  useEffect(() => {
-    fetch(`${API_URL}/tasks`)
-      .then(response => response.json())
-      .then(data => {
-        setTasks(data.task)
-      })
-  }, [])
-
-  const toogleTask = async (id) => {
-    await fetch(`${API_URL}/tasks/${id}/completed`, {
-      method: 'PATCH'
+      return response.json()
     })
-  }
-
-  const filterTasks = (status) => {
-    fetch(`${API_URL}/tasks?status=${status}`)
-      .then(response => response.json())
-      .then(data => {
-        setTasks(data.task)
-      })
-  }
-
-  const addTask = () => {
-    fetch(`${API_URL}/tasks`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        id: Number(newId),
-        titre: newTitle,
-        complete: false
-      })
+    .then(data => {
+      setTasks(data.task)
     })
-  }
+}
 
-  const deleteTask = () => {
-    fetch(`${API_URL}/tasks/${deleteId}`, {
-      method: 'DELETE'
+useEffect(() => {
+  loadTasks()
+}, [])
+
+const toogleTask = (id) => {
+  fetch(`${API_URL}/tasks/${id}/completed`, {
+    method: 'PATCH'
+  })
+    .then(response => {
+      if (!response.ok) {
+        alert("Une erreur s'est produite")
+        return
+      }
+
+      loadTasks()
     })
-  }
+}
 
+const filterTasks = (status) => {
+  fetch(`${API_URL}/tasks?status=${status}`)
+    .then(response => {
+      if (!response.ok) {
+        alert("Une erreur s'est produite")
+      }
+
+      return response.json()
+    })
+    .then(data => {
+      setTasks(data.task)
+    })
+}
+
+const addTask = () => {
+  fetch(`${API_URL}/tasks`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      id: Number(newId),
+      titre: newTitle,
+      complete: false
+    })
+  })
+    .then(response => {
+      if (!response.ok) {
+        alert("Une tâche est déjà associée à cet ID, veuillez mettre un autre ID.")
+        return
+      }
+
+      loadTasks()
+    })
+}
+
+const deleteTask = () => {
+  fetch(`${API_URL}/tasks/${deleteId}`, {
+    method: 'DELETE'
+  })
+    .then(response => {
+      if (!response.ok) {
+        alert("Une erreur s'est produite")
+        return
+      }
+
+      loadTasks()
+    })
+}
 
   return (
     <>
@@ -88,14 +126,14 @@ function App() {
                   ))}
                 </select>
 
-                <button onClick={() => {deleteTask(), setShowDeleteForm(false)}} >Confirmer</button>
+                <button onClick={() => { deleteTask(), setShowDeleteForm(false) }} >Confirmer</button>
               </div>
             )}
             {showAddForm && (
               <div className="form">
                 <input type="number" placeholder="ID" value={newId} onChange={(e) => setNewId(e.target.value)} />
                 <input type="text" placeholder="Titre" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
-                <button onClick={() => {addTask(), setShowAddForm(false)} }>Appliquer</button>
+                <button onClick={() => { addTask(), setShowAddForm(false) }}>Appliquer</button>
               </div>
             )}
             <div className='tasks'>
