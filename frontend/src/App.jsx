@@ -7,6 +7,8 @@ function App() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newId, setNewId] = useState('');
   const [newTitle, setNewTitle] = useState('');
+  const [deleteId, setDeleteId] = useState('');
+  const [showDeleteForm, setShowDeleteForm] = useState(false);
 
 
   useEffect(() => {
@@ -45,6 +47,12 @@ function App() {
     })
   }
 
+  const deleteTask = () => {
+    fetch(`${API_URL}/tasks/${deleteId}`, {
+      method: 'DELETE'
+    })
+  }
+
 
   return (
     <>
@@ -65,14 +73,29 @@ function App() {
               </div>
               <div className='button-manager'>
                 <button id='blue' onClick={() => setShowAddForm(!showAddForm)}>Ajouter</button>
-                <button id='red'>Supprimer</button>
+                <button id='red' onClick={() => setShowDeleteForm(!showDeleteForm)}>Supprimer</button>
               </div>
             </div>
+            {showDeleteForm && (
+              <div className="form">
+                <select value={deleteId} onChange={(e) => setDeleteId(e.target.value)}>
+                  <option value="">Choisir une tâche</option>
+
+                  {tasks.map((task) => (
+                    <option key={task.id} value={task.id}>
+                      {task.titre}
+                    </option>
+                  ))}
+                </select>
+
+                <button onClick={() => {deleteTask(), setShowDeleteForm(false)}} >Confirmer</button>
+              </div>
+            )}
             {showAddForm && (
-              <div className="add-form">
+              <div className="form">
                 <input type="number" placeholder="ID" value={newId} onChange={(e) => setNewId(e.target.value)} />
                 <input type="text" placeholder="Titre" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
-                <button onClick={addTask}>Appliquer</button>
+                <button onClick={() => {addTask(), setShowAddForm(false)} }>Appliquer</button>
               </div>
             )}
             <div className='tasks'>
