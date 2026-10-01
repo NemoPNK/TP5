@@ -6,9 +6,9 @@ const port = 3000;
 const pool = new Pool({
     host: 'db',
     port: 5432,
-    user: 'ekod',
-    password: 'ekod',
-    database: 'tasks'
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
 app.use(express.json());

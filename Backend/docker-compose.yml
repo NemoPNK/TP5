@@ -2,9 +2,9 @@ services:
   db:
     image: postgres:18-alpine
     environment:
-      POSTGRES_USER: ekod
-      POSTGRES_PASSWORD: ekod
-      POSTGRES_DB: tasks
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
       - postgres_data:/var/lib/postgresql
       - ./db-init:/docker-entrypoint-initdb.d
@@ -15,6 +15,10 @@ services:
     build: .
     ports:
       - "3000:3000"
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
 
 volumes:
   postgres_data:

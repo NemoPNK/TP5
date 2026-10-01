@@ -11,6 +11,7 @@ function App() {
   const [showDeleteForm, setShowDeleteForm] = useState(false);
   const [message, setMessage] = useState('Je suis ben votre assitant personnel !');
   const [messageColor, setMessageColor] = useState('black');
+  const [isError, setIsError] = useState(false);
 
   const loadTasks = () => {
     fetch(`${API_URL}/tasks`)
@@ -77,10 +78,12 @@ function App() {
     if (newTitle.trim() === '') {
       setMessage("Ben : Le titre est obligatoire !! 😡");
       setMessageColor("#D50004");
+      setIsError(true)
 
       setTimeout(() => {
         setMessage("Ben votre assistant personnel !");
         setMessageColor("black");
+        setIsError(false)
       }, 3000);
       return
     }
@@ -100,10 +103,12 @@ function App() {
         if (!response.ok) {
           setMessage("Ben : Une taches a deja cette ID choisis en une autre !! 😡");
           setMessageColor("#D50004");
+          setIsError(true)
 
           setTimeout(() => {
             setMessage("Ben votre assistant personnel !");
             setMessageColor("black");
+            setIsError(false)
           }, 3000);
           return
         }
@@ -127,10 +132,12 @@ function App() {
         if (!response.ok) {
           setMessage("Ben : Une erreur c'est produite");
           setMessageColor("#D50004");
+          setIsError(true)
 
           setTimeout(() => {
             setMessage("Ben votre assistant personnel !");
             setMessageColor("black");
+            setIsError(false)
           }, 3000);
           return
         }
@@ -153,58 +160,77 @@ function App() {
           <h1>Range tes taches</h1>
         </div>
       </header>
+
       <main>
         <section>
           <div>
-            <h2 className='tasks-title' >Vos taches :</h2>
-            <p id='output' style={{ color: messageColor }}>{message}</p>
-            <div className='edit-container' >
+            <h2 className='tasks-title'>Vos taches :</h2>
+
+            <p id='output' role={isError ? 'alert' : 'status'} style={{ color: messageColor }}>{message}</p>
+
+            <div className='edit-container'>
               <div className='button-manager'>
-                <button id='green' onClick={() => filterTasks('all')}>Tous</button>
-                <button id='green' onClick={() => filterTasks('completed')}>Complété</button>
-                <button id='orange' onClick={() => filterTasks('pending')}>En attente</button>
+                <button id='green' onClick={() => filterTasks('all')}>
+                  Tous
+                </button>
+
+                <button id='green' onClick={() => filterTasks('completed')}>
+                  Complété
+                </button>
+
+                <button id='orange' onClick={() => filterTasks('pending')}>
+                  En attente
+                </button>
               </div>
+
               <div className='button-manager'>
-                <button id='blue' onClick={() => setShowAddForm(!showAddForm)}>Ajouter</button>
-                <button id='red' onClick={() => setShowDeleteForm(!showDeleteForm)}>Supprimer</button>
+                <button id='blue' onClick={() => setShowAddForm(!showAddForm)}>
+                  Ajouter
+                </button>
+
+                <button id='red' onClick={() => setShowDeleteForm(!showDeleteForm)}>
+                  Supprimer
+                </button>
               </div>
             </div>
+
             {showDeleteForm && (
               <div className="form">
-                <select value={deleteId} onChange={(e) => setDeleteId(e.target.value)}>
+                <label htmlFor="delete-task">Tâche à supprimer</label>
+                <select id="delete-task" value={deleteId} onChange={(e) => setDeleteId(e.target.value)}>
                   <option value="">Choisir une tâche</option>
-
                   {tasks.map((task) => (
-                    <option key={task.id} value={task.id}>
-                      {task.titre}
-                    </option>
+                    <option key={task.id} value={task.id}>{task.titre}</option>
                   ))}
                 </select>
-
-                <button onClick={() => { deleteTask(), setShowDeleteForm(false) }} >Confirmer</button>
+                <button onClick={() => { deleteTask(); setShowDeleteForm(false) }}>Confirmer</button>
               </div>
             )}
+
             {showAddForm && (
               <div className="form">
-                <input type="number" placeholder="ID" value={newId} onChange={(e) => setNewId(e.target.value)} />
-                <input type="text" placeholder="Titre (Obligatoire)" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
-                <button onClick={() => { addTask(), setShowAddForm(false) }}>Appliquer</button>
+                <label htmlFor="task-id">ID</label>
+                <input id="task-id" type="number" placeholder="Entrer un nombre" value={newId} onChange={(e) => setNewId(e.target.value)} />
+                <label htmlFor="task-title">Titre</label>
+                <input id="task-title" type="text" placeholder="Entrer un titre" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
+                <button onClick={() => { addTask(); setShowAddForm(false) }}>Appliquer</button>
               </div>
             )}
-            <div className='tasks'>
+
+            <ul className='tasks'>
               {tasks.map((task) => (
-                <p key={task.id}>
+                <li key={task.id}>
                   {task.id} - {task.titre}
 
                   <input
                     type="checkbox"
+                    aria-label={`Checkbox reliée à ${task.titre}`}
                     checked={task.complete}
                     onChange={() => toogleTask(task.id)}
                   />
-
-                </p>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </section>
       </main>
