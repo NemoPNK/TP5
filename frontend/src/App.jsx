@@ -10,87 +10,88 @@ function App() {
   const [deleteId, setDeleteId] = useState('');
   const [showDeleteForm, setShowDeleteForm] = useState(false);
 
-const loadTasks = () => {
-  fetch(`${API_URL}/tasks`)
-    .then(response => {
-      if (!response.ok) {
-        alert("Une erreur s'est produite")
-      }
+  const loadTasks = () => {
+    fetch(`${API_URL}/tasks`)
+      .then(response => {
+        if (!response.ok) {
+          alert("Une erreur s'est produite")
+        }
 
-      return response.json()
+        return response.json()
+      })
+      .then(data => {
+        setTasks(data.task)
+      })
+  }
+
+  useEffect(() => {
+    loadTasks()
+  }, [])
+
+  const toogleTask = (id) => {
+    fetch(`${API_URL}/tasks/${id}/completed`, {
+      method: 'PATCH'
     })
-    .then(data => {
-      setTasks(data.task)
+      .then(response => {
+        if (!response.ok) {
+          alert("Une erreur s'est produite")
+          return
+        }
+
+        loadTasks()
+      })
+  }
+
+  const filterTasks = (status) => {
+    fetch(`${API_URL}/tasks?status=${status}`)
+      .then(response => {
+        if (!response.ok) {
+          alert("Une erreur s'est produite")
+        }
+
+        return response.json()
+      })
+      .then(data => {
+        setTasks(data.task)
+      })
+  }
+
+  const addTask = () => {
+    fetch(`${API_URL}/tasks`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: Number(newId),
+        titre: newTitle,
+        complete: false
+      })
     })
-}
+      .then(response => {
+        if (!response.ok) {
+          alert("Une tâche est déjà associée à cet ID, veuillez mettre un autre ID.")
+          return
+        }
 
-useEffect(() => {
-  loadTasks()
-}, [])
+        alert("C'est bon la tache est la")
+        loadTasks()
+      })
+  }
 
-const toogleTask = (id) => {
-  fetch(`${API_URL}/tasks/${id}/completed`, {
-    method: 'PATCH'
-  })
-    .then(response => {
-      if (!response.ok) {
-        alert("Une erreur s'est produite")
-        return
-      }
-
-      loadTasks()
+  const deleteTask = () => {
+    fetch(`${API_URL}/tasks/${deleteId}`, {
+      method: 'DELETE'
     })
-}
-
-const filterTasks = (status) => {
-  fetch(`${API_URL}/tasks?status=${status}`)
-    .then(response => {
-      if (!response.ok) {
-        alert("Une erreur s'est produite")
-      }
-
-      return response.json()
-    })
-    .then(data => {
-      setTasks(data.task)
-    })
-}
-
-const addTask = () => {
-  fetch(`${API_URL}/tasks`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      id: Number(newId),
-      titre: newTitle,
-      complete: false
-    })
-  })
-    .then(response => {
-      if (!response.ok) {
-        alert("Une tâche est déjà associée à cet ID, veuillez mettre un autre ID.")
-        return
-      }
-
-      loadTasks()
-    })
-}
-
-const deleteTask = () => {
-  fetch(`${API_URL}/tasks/${deleteId}`, {
-    method: 'DELETE'
-  })
-    .then(response => {
-      if (!response.ok) {
-        alert("Une erreur s'est produite")
-        return
-      }
-
-      loadTasks()
-    })
-}
+      .then(response => {
+        if (!response.ok) {
+          alert("Une erreur s'est produite")
+          return
+        }
+        alert("C'est bon la taches est plus la")
+        loadTasks()
+      })
+  }
 
   return (
     <>
