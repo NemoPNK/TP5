@@ -42,8 +42,19 @@ app.post('/tasks', async (req, res) => {
 });
 
 app.get('/tasks', async (req, res) => {
-    const result = await pool.query('SELECT * FROM tasks');
-    console.log(result.rows);
+    const status = req.query.status;
+
+    let query = 'SELECT * FROM tasks ORDER BY id';
+
+    if (status === 'completed') {
+        query = 'SELECT * FROM tasks WHERE complete = TRUE ORDER BY id';
+    }
+
+    if (status === 'pending') {
+        query = 'SELECT * FROM tasks WHERE complete = FALSE ORDER BY id';
+    }
+
+    const result = await pool.query(query);
 
     res.status(200).json({
         message: 'Get ok',
@@ -85,7 +96,7 @@ app.patch('/tasks/:id/completed', async (req, res) => {
     const taskID = req.params.id;
 
     const result = await pool.query(
-        'UPDATE tasks SET complete = TRUE WHERE id = $1 RETURNING *',
+        'UPDATE tasks SET complete = NOT complete WHERE id = $1 RETURNING *',
         [taskID]
     );
 
