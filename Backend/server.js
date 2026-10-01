@@ -30,8 +30,8 @@ app.listen(port, () => {
 app.post('/tasks', async (req, res) => {
     const newTask = req.body;
     await pool.query(
-        'INSERT INTO tasks (id, titre, complete) VALUES ($1, $2, $3)',
-        [newTask.id, newTask.titre, newTask.complete]
+        'INSERT INTO tasks (id, titre, complete, assignee) VALUES ($1, $2, $3, $4)',
+        [newTask.id, newTask.titre, newTask.complete, newTask.assignee]
     );
 
     console.log("Task : ", newTask)

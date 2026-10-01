@@ -5,8 +5,8 @@ CREATE TABLE tasks (
     assignee VARCHAR(50)
 );
 
-INSERT INTO tasks (id, titre, complete)
+INSERT INTO tasks (id, titre, complete, assignee)
 VALUES 
-    (1, 'monter', TRUE),
-    (2, 'down', FALSE),
-    (3, 'side', FALSE);
+    (1, 'monter', TRUE, 'Paul de Montrouge'),
+    (2, 'down', FALSE, NULL),
+    (3, 'side', FALSE, NULL);
