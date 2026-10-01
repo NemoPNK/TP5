@@ -57,6 +57,11 @@ function App() {
   }
 
   const addTask = () => {
+    if (newTitle.trim() === '') {
+      alert("Le titre c'est obligatoire !!")
+      return
+    }
+
     fetch(`${API_URL}/tasks`, {
       method: 'POST',
       headers: {
@@ -74,8 +79,8 @@ function App() {
           return
         }
 
-        alert("C'est bon la tache est la")
         loadTasks()
+        alert("C'est bon la tache est la")
       })
   }
 
@@ -88,8 +93,9 @@ function App() {
           alert("Une erreur s'est produite")
           return
         }
-        alert("C'est bon la taches est plus la")
+
         loadTasks()
+        alert("C'est bon la taches est plus la")
       })
   }
 
@@ -133,7 +139,7 @@ function App() {
             {showAddForm && (
               <div className="form">
                 <input type="number" placeholder="ID" value={newId} onChange={(e) => setNewId(e.target.value)} />
-                <input type="text" placeholder="Titre" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
+                <input type="text" placeholder="Titre (Obligatoire)" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
                 <button onClick={() => { addTask(), setShowAddForm(false) }}>Appliquer</button>
               </div>
             )}
