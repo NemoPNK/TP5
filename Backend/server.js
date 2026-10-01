@@ -34,7 +34,7 @@ app.post('/tasks', async (req, res) => {
         [newTask.id, newTask.titre, newTask.complete, newTask.assignee]
     );
 
-    console.log("Task : ", newTask)
+    console.log("Voila c'est fait")
     res.status(201).json({
         message: 'Post ok',
         task: newTask
